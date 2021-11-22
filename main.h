@@ -48,6 +48,12 @@ enum Emote_Hungry {
     HUNGRY
 };
 
+enum State {
+    NORMAL,
+    SLEEP
+};
+
+
 class Emotion {
     public:
         ~Emotion();
@@ -68,12 +74,13 @@ class Emotion {
         Emote_Attention get_Emote_Attention() { return _Emote_Attention; }
         void set_Emote_Hungry();
         Emote_Hungry get_Emote_Hungry() { return _Emote_Hungry; }
+        void set_Emote_Normal();
+        bool get_Emote_Normal() { return _Emote_Normal; };
         
-        void set_emotion(double _humid, double _tempr, int _noise, bool _shock);
+        void set_emotion(double _humid, double _tempr, int _noise, double _batt, int _ilum, bool _shock, bool _slide);
+        void print_Emote();
 
     private:
-        bool Happy;
-        bool Sleep;
         Emote_Humidity _Emote_Humidity;
         Emote_Temperature _Emote_Temperature;
         Emote_Noise _Emote_Noise;
@@ -82,11 +89,36 @@ class Emotion {
         Emote_Condition _Emote_Condition;
         Emote_Attention _Emote_Attention;
         Emote_Hungry _Emote_Hungry;
+        bool _Emote_Normal;
 };
 
 
-class Tamagotchi {
+class Tamagotchi{
+    public:
+        ~Tamagotchi();
+        Tamagotchi();
+        void set_State(State __state) { _state = __state; };
+        State get_State() { return _state; }
+        void start_game();
+        void play();
+        void set_val_sensor(double, double, double, int, int, bool, bool);
+        
+    private:
+        bool Game_State;
+        State _state;
+        Emotion _emote;
+        int Game_step;
+        int t_HP;
 
+        //sensor
+        double t_humid;
+        double t_tempr;
+        int t_noise;
+        double t_batt;
+        int t_ilum;
+        bool t_shock;
+        bool t_slide;  
 };
+
 
 #endif /*main.h*/

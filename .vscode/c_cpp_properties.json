@@ -28,12 +28,13 @@
                 "-ffunction-sections",
                 "-fdata-sections",
                 "-fno-threadsafe-statics",
-                "-Wno-error=narrowing" 
+                "-Wno-error=narrowing"
             ],
             "intelliSenseMode": "gcc-x64",
             "includePath": [
                 "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\cores\\arduino",
                 "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\variants\\eightanaloginputs",
+                "C:\\Users\\newdm\\Documents\\Arduino\\libraries\\Rtc_by_Makuna\\src",
                 "C:\\Users\\newdm\\Documents\\Arduino\\libraries\\DHT_sensor_library",
                 "C:\\Program Files (x86)\\Arduino\\libraries\\Adafruit_Sensor-master",
                 "c:\\program files (x86)\\arduino\\hardware\\tools\\avr\\lib\\gcc\\avr\\7.3.0\\include",
