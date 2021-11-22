@@ -1,5 +1,5 @@
 {
-    "sketch": "Physical_Interaction_Tamagotchi.ino",
+    "sketch": "Physical_Interaction_Tamagotchi copy.ino",
     "configuration": "cpu=atmega328old",
     "board": "arduino:avr:nano",
     "port": "COM5"
