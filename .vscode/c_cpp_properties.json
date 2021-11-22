@@ -28,7 +28,7 @@
                 "-ffunction-sections",
                 "-fdata-sections",
                 "-fno-threadsafe-statics",
-                "-Wno-error=narrowing"
+                "-Wno-error=narrowing" 
             ],
             "intelliSenseMode": "gcc-x64",
             "includePath": [
