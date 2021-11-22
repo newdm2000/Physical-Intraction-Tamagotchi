@@ -1,5 +1,10 @@
 #include "setting.h"
 #include "main.h"
+#include <DHT.h>
+
+#define PIN_DHT 3
+#define PIN_VIB 2
+#define PIN_CDS A0
 
 double humi;
 double temp;
@@ -7,7 +12,6 @@ int ilum;
 bool shock;
 
 DHT dht(PIN_DHT, DHT22);
-void Serial_print(double ilum, double humi, int temp, bool shock);
 
 void setup()
 {
@@ -22,20 +26,19 @@ void loop()
     humi = dht.readHumidity();
     temp = dht.readTemperature();
     shock = (digitalRead(PIN_VIB) == HIGH);
-    Serial.print(ilum);
-    Serial.print("\t");
-    Serial.print(humi);
-    Serial.print("\t");
-    Serial.print(temp);
-    Serial.print("\t");
-    Serial.print(shock);
-    Serial.println("\n");
 
+    Serial_print(ilum, humi, temp, shock);
     delay(1000);
-    //serial_print(ilum, humi, temp, shock);
 }
 
-/*void Serial_print(double ilum, double humi, int temp, bool shock){
-    
-}*/
+void Serial_print(double _ilum, double _humid, int _tempr, bool _shock){
+    Serial.print(_ilum);
+    Serial.print("\t");
+    Serial.print(_humid);
+    Serial.print("\t");
+    Serial.print(_tempr);
+    Serial.print("\t");
+    Serial.print(_shock);
+    Serial.println("\n");
+}
 
