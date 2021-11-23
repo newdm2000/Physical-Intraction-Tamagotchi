@@ -56,7 +56,7 @@ enum State {
 
 class Emotion {
     public:
-        ~Emotion();
+        //~Emotion();
         Emotion();
         void set_Emote_Humidity(double _humid);
         Emote_Humidity get_Emote_Humidity() { return _Emote_Humidity; }
@@ -95,13 +95,13 @@ class Emotion {
 
 class Tamagotchi{
     public:
-        ~Tamagotchi();
+        //~Tamagotchi();
         Tamagotchi();
         void set_State(State __state) { _state = __state; };
         State get_State() { return _state; }
         void start_game();
         void play();
-        void set_val_sensor(double, double, double, int, int, bool, bool);
+        void set_val_sensor(double, double, int, double, int, bool, bool);
         
     private:
         bool Game_State;

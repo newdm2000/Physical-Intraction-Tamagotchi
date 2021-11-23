@@ -34,10 +34,7 @@ bool _slide;
 DHT dht(PIN_DHT, DHT22);
 ThreeWire myWire(PIN_dRTC, PIN_cRTC, PIN_rRTC);
 RtcDS1302<ThreeWire> Rtc(myWire);
-
-
-Tamagotchi game_tamagotchi = Tamagotchi();
-
+Tamagotchi game_tamagotchi;
 
 
 void setup()
