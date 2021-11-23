@@ -52,7 +52,7 @@ void Emotion::set_Emote_Brightness(int _ilum) {
     else _Emote_Brightness = BR_NORMAL;
 }
 
-void Emotion::set_Emote_Condition();
+void Emotion::set_Emote_Condition() {}
 
 void Emotion::set_Emote_Attention(bool _shock, bool _slide) {
     if(_shock == true && _Emote_Attention == AT_NORMAL) _Emote_Attention = ATTENTION;
@@ -62,7 +62,7 @@ void Emotion::set_Emote_Attention(bool _shock, bool _slide) {
     else _Emote_Attention = AT_NORMAL;
 }
 
-void set_Emote_Hungry();
+void Emotion::set_Emote_Hungry();
 
 void Emotion::set_Emote_Normal() {
     if(
@@ -152,4 +152,10 @@ void Tamagotchi::play(){
     }
 
     _emote.print_Emote();
+}
+
+void Tamagotchi::set_val_sensor(double, double, int, double, int, bool, bool) 
+
+{
+
 }
