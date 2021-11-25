@@ -14,8 +14,10 @@
 #define PIN_cRTC 5
 #define PIN_dRTC 4
 #define PIN_rRTC 7
-#define PIN_BUTN1 
-#define PIN_BUTN2 
+#define PIN_BUTN1 8
+#define PIN_BUTN2 9
+#define PIN_BUTN3 10
+#define PIN_BATT A2
 #define countof(a) (sizeof(a) / sizeof(a[0]))
 
 
@@ -24,10 +26,12 @@ double _humid;
 double _tempr;
 int _noise;
 double _batt=0;
-int _ilum;
+double _ilum;
 bool _shock;
 bool _slide;
-
+bool _meal;
+bool _gm_butt;
+int game_time;
 
 
 
@@ -35,26 +39,25 @@ DHT dht(PIN_DHT, DHT22);
 ThreeWire myWire(PIN_dRTC, PIN_cRTC, PIN_rRTC);
 RtcDS1302<ThreeWire> Rtc(myWire);
 Tamagotchi game_tamagotchi;
-
+RtcDateTime game_start_time;
 
 void setup()
 {
-    game_tamagotchi.start_game();
     Serial.begin(9600);
     dht.begin();
-
     pinMode(PIN_VIB, INPUT);
+    pinMode(PIN_BUTN1, INPUT);
+    pinMode(PIN_BUTN2, INPUT);
 
-    Serial.print("compiled: ");
-    Serial.print(__DATE__);
-    Serial.println(__TIME__);
+    //Serial.print("compiled: ");
+    //Serial.print(__DATE__);
+    //Serial.println(__TIME__);
 
     Rtc.Begin();
-
     RtcDateTime compiled = RtcDateTime(__DATE__, __TIME__);
 
-    printDateTime(compiled);
-    Serial.println();
+    //printDateTime(compiled);
+    //Serial.println();
 
     if (!Rtc.IsDateTimeValid()) 
     {
@@ -77,60 +80,62 @@ void setup()
         Serial.println("RTC was not actively running, starting now");
         Rtc.SetIsRunning(true);
     }
-
-    RtcDateTime now = Rtc.GetDateTime();
-    if (now < compiled) 
-    {
-        Serial.println("RTC is older than compile time!  (Updating DateTime)");
-        Rtc.SetDateTime(compiled);
-    }
-    else if (now > compiled) 
-    {
-        Serial.println("RTC is newer than compile time. (this is expected)");
-    }
-    else if (now == compiled) 
-    {
-        Serial.println("RTC is the same as compile time! (not expected but all is fine)");
-    }
-
 }
 
 void loop()
-{
-    
+{   
     RtcDateTime now = Rtc.GetDateTime();
 	_ilum = analogRead(PIN_CDS);
     _humid = dht.readHumidity();
     _tempr = dht.readTemperature();
     _shock = !(digitalRead(PIN_VIB) == HIGH);
     _noise = analogRead(PIN_MIC);
-    
-    printDateTime(now);
+    _slide = (digitalRead(PIN_BUTN2) == HIGH);
+    _gm_butt = (digitalRead(PIN_BUTN1) == HIGH);
+    _batt = BattCheck();
+    _meal = (digitalRead(PIN_BUTN3) == HIGH);
+
+    game_time = ((now.Hour()-game_start_time.Hour())*60 + (now.Minute()-game_start_time.Minute()))*60 + (now.Second()-game_start_time.Second());
+
+    if(game_tamagotchi.get_Game_stste() == false) {
+        Serial.println("Press Game Start Button!!");
+        while(digitalRead(PIN_BUTN1) == LOW) {
+        }
+        game_tamagotchi.start_game();
+        game_tamagotchi.set_Game_state(true);
+        game_start_time = Rtc.GetDateTime();
+    }
+
+    //printDateTime(game_start_time);
+    //printDateTime(now);
 
     if (!now.IsValid())
     {
-        Serial.println("RTC lost confidence in the DateTime!");
+        Serial.print("RTC lost confidence in the DateTime!");
     }
-
-    game_tamagotchi.set_val_sensor(_humid, _tempr, _noise, _batt,  _ilum, _shock, _slide);
+    //Serial.println(game_time);
+    game_tamagotchi.set_val_sensor(_humid, _tempr, _noise, _batt, _ilum, game_time, _shock, _slide, _meal);
+    //Serial_print(_humid, _tempr, _noise, _batt, _ilum, _shock, _slide);
     game_tamagotchi.play();
-    
-    delay(500);
 }
 
-void Serial_print(double _humid, double _tempr, int _noise, int _lium, bool _shock){
+void Serial_print(double _humid, double _tempr, int _noise, double _batt, double _ilum, bool _shock, bool _slide){
     Serial.print(_humid);
     Serial.print("\t");
     Serial.print(_tempr);
     Serial.print("\t");
     Serial.print(_noise);
     Serial.print("\t");
+    Serial.print(_batt);
+    Serial.print("\t");
     Serial.print(_ilum);
     Serial.print("\t");
     Serial.print(_shock);
-    Serial.println("\n");
-
+    Serial.println("\t");
+    Serial.print(_slide);
+    Serial.println("\t");
 }
+
 
 void printDateTime(const RtcDateTime& dt)
 {
@@ -146,5 +151,13 @@ void printDateTime(const RtcDateTime& dt)
             dt.Minute(),
             dt.Second() );
     Serial.print(datestring);
-    Serial.print("\t");
+    Serial.print("\n");
+}
+
+int BattCheck() {
+	int vl=analogRead(PIN_BATT);
+	int bl=map(vl,BATT_MIN,BATT_MAX,0,100);
+	if (vl<BATT_MIN) bl=0;
+	if (vl>BATT_MAX) bl=100;
+	return bl;
 }

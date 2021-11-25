@@ -23,6 +23,7 @@ enum Emote_Noise {
 };
 
 enum Emote_Battery {
+    N2,
     BA_NORMAL,
     TIRED
 };
@@ -34,6 +35,7 @@ enum Emote_Brightness {
 };
 
 enum Emote_Condition {
+    N3,
     CO_NORMAL,
     SLEEPY
 };
@@ -44,6 +46,7 @@ enum Emote_Attention {
 };
 
 enum Emote_Hungry {
+    N5,
     HG_NORMAL,
     HUNGRY
 };
@@ -66,18 +69,18 @@ class Emotion {
         Emote_Noise get_Emote_Noise() { return _Emote_Noise; }
         void set_Emote_Battery(double _batt);
         Emote_Battery get_Emote_Battery() { return _Emote_Battery; }
-        void set_Emote_Brightness(int _ilum);
+        void set_Emote_Brightness(double _ilum);
         Emote_Brightness get_Emote_Brightness() { return _Emote_Brightness; }
-        void set_Emote_Condition();
+        void set_Emote_Condition(int _time);
         Emote_Condition get_Emote_Condition() { return _Emote_Condition; }
         void set_Emote_Attention(bool _shock, bool _slide);
         Emote_Attention get_Emote_Attention() { return _Emote_Attention; }
-        void set_Emote_Hungry();
+        void set_Emote_Hungry(int _time, bool _meal);
         Emote_Hungry get_Emote_Hungry() { return _Emote_Hungry; }
         void set_Emote_Normal();
         bool get_Emote_Normal() { return _Emote_Normal; };
         
-        void set_emotion(double _humid, double _tempr, int _noise, double _batt, int _ilum, bool _shock, bool _slide);
+        void set_emotion(double _humid, double _tempr, int _noise, double _batt, double _ilum, int _time, bool _shock, bool _slide, bool _meal);
         void print_Emote();
 
     private:
@@ -97,11 +100,13 @@ class Tamagotchi{
     public:
         //~Tamagotchi();
         Tamagotchi();
-        void set_State(State __state) { _state = __state; };
+        void set_State(State __state) { _state = __state; }
         State get_State() { return _state; }
+        bool get_Game_stste() { return Game_State; }
+        void set_Game_state(bool gs) { Game_State = gs; }
         void start_game();
         void play();
-        void set_val_sensor(double, double, int, double, int, bool, bool);
+        void set_val_sensor(double _humid, double _tempr, int _noise, double _batt, double _ilum, int _time, bool _shock, bool _slide, bool _meal);
         
     private:
         bool Game_State;
@@ -116,8 +121,15 @@ class Tamagotchi{
         int t_noise;
         double t_batt;
         int t_ilum;
+        int t_time;
         bool t_shock;
-        bool t_slide;  
+        bool t_slide;
+        bool t_meal;
+
+        int cnt_time;
+        int critical_time;
+        int game_time;
+        bool cnt1;
 };
 
 
