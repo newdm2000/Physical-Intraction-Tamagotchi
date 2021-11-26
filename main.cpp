@@ -146,13 +146,12 @@ void Tamagotchi::start_game(){
     Game_State = false;
     _state = NORMAL;
     t_HP = 100;
-    Game_step = 0;
+    Game_step = 1;
+    cnt1 = false;
 }
 
 void Tamagotchi::play(){
     if(Game_State == true){
-        _emote.set_emotion(t_humid, t_tempr, t_noise, t_batt, t_ilum, t_time, t_shock, t_slide, t_meal);
-
         if(_emote.get_Emote_Normal() == true && _emote.get_Emote_Condition() == SLEEPY && _state == NORMAL) {
             _state = SLEEP;
         }
@@ -160,43 +159,42 @@ void Tamagotchi::play(){
             _state = NORMAL;
             Game_step++;
         }
-        else if(_state == NORMAL) _state == NORMAL;
-        else if(_state == SLEEP) _state == SLEEP;
+        else if(_state == NORMAL) {
+            _state == NORMAL;
+             _emote.set_emotion(t_humid, t_tempr, t_noise, t_batt, t_ilum, t_time, t_shock, t_slide, t_meal);
+        }
+        else if(_state == SLEEP) {
+            _state == SLEEP;
+            _emote.set_Emote_Condition(t_time);
+        }
         else _state == NORMAL;
 
 
 
-        if(!(_emote.get_Emote_Normal()) && critical_time == -1) {
+        if(!(_emote.get_Emote_Normal()) && critical_time == -1 && !(cnt1)) {
             critical_time = t_time;
         }
-        else if(_emote.get_Emote_Normal() && critical_time != -1) {
-            critical_time = -1;
-        }
-        else {}
-
-        if(critical_time != -1) {
+        else if(!(_emote.get_Emote_Normal()) && ((t_time - critical_time) % LIMIT_TIME == 0) && (t_time != critical_time) && !(cnt1)) {
             cnt1 = true;
-        }
-        else if((t_time - critical_time) % LIMIT_TIME == 0 && cnt1 && critical_time != -1) {
             t_HP = t_HP - 5;
+        }
+        else if(!(_emote.get_Emote_Normal()) && ((t_time - critical_time) % LIMIT_TIME != 0) && (t_time != critical_time) && (cnt1)) {
             cnt1 = false;
         }
-        else if((t_time - critical_time) % LIMIT_TIME != 0 && !(cnt1) && critical_time != -1) {
-            cnt1 = true;
+        else if((_emote.get_Emote_Normal())) {
+            cnt1 = false;
+            critical_time = -1;
         }
-
-        else if(critical_time == -1) cnt1 = false;
-        else if(!cnt1) cnt1 = false;
-        else cnt1 = true;
-
-
+        else if(cnt1) cnt1 = true;
+        else cnt1 = false;
 
         if(t_HP<=0){
-            Game_State == false;
+            Game_State = false;
         }
         if (critical_time != -1) Serial.println(t_time - critical_time);
     }
     Serial.println(t_HP);
+    set_em();
     _emote.print_Emote();
 }
 
@@ -211,4 +209,16 @@ void Tamagotchi::set_val_sensor(double _humid, double _tempr, int _noise, double
     t_shock = _shock;
     t_slide = _slide;
     t_meal = _meal;
+}
+
+void Tamagotchi::set_em(){
+    em[0] = _emote.get_Emote_Humidity();
+    em[1] = _emote.get_Emote_Temperature();
+    em[2] = _emote.get_Emote_Noise();
+    em[3] = _emote.get_Emote_Battery();
+    em[4] = _emote.get_Emote_Brightness();
+    em[5] = _emote.get_Emote_Condition();
+    em[6] = _emote.get_Emote_Attention();
+    em[7] = _emote.get_Emote_Hungry();
+    em[8] = _emote.get_Emote_Normal();
 }

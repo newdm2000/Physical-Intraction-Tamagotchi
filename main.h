@@ -107,7 +107,12 @@ class Tamagotchi{
         void start_game();
         void play();
         void set_val_sensor(double _humid, double _tempr, int _noise, double _batt, double _ilum, int _time, bool _shock, bool _slide, bool _meal);
+        void set_em();
+        int *get_em() { return em; }
+        int get_t_HP() { return t_HP; }
         
+
+
     private:
         bool Game_State;
         State _state;
@@ -130,6 +135,7 @@ class Tamagotchi{
         int critical_time;
         int game_time;
         bool cnt1;
+        int em[9];
 };
 
 

@@ -34,6 +34,7 @@
             "includePath": [
                 "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\cores\\arduino",
                 "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\variants\\eightanaloginputs",
+                "C:\\Users\\newdm\\Documents\\Arduino\\libraries\\U8glib\\src",
                 "C:\\Users\\newdm\\Documents\\Arduino\\libraries\\Rtc_by_Makuna\\src",
                 "C:\\Users\\newdm\\Documents\\Arduino\\libraries\\DHT_sensor_library",
                 "C:\\Program Files (x86)\\Arduino\\libraries\\Adafruit_Sensor-master",

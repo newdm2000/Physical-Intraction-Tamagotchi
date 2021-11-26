@@ -1,10 +1,11 @@
+#include <U8glib.h>
 #include <ThreeWire.h>
 #include <RtcDS1302.h>
 #include "setting.h"
 #include "main.h"
 #include "DHT.h"
 
-
+U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NONE);
 //double _humid, double _tempr, int _noise, int ilum, bool _shock, bool _slide
 
 #define PIN_DHT 3
@@ -43,8 +44,8 @@ RtcDateTime game_start_time;
 
 void setup()
 {
-    Serial.begin(9600);
-    dht.begin();
+    Serial.begin(9600); //시리얼 정보
+    dht.begin(); //dht22시작
     pinMode(PIN_VIB, INPUT);
     pinMode(PIN_BUTN1, INPUT);
     pinMode(PIN_BUTN2, INPUT);
@@ -117,7 +118,22 @@ void loop()
     game_tamagotchi.set_val_sensor(_humid, _tempr, _noise, _batt, _ilum, game_time, _shock, _slide, _meal);
     //Serial_print(_humid, _tempr, _noise, _batt, _ilum, _shock, _slide);
     game_tamagotchi.play();
+    u8g.firstPage(); //OLED 페이지 시작
+    do{
+        u8g.setFont(u8g_font_unifont);
+        for(int i=0; i<9; i++){
+            u8g.setPrintPos(10*i, 10);
+            u8g.print(game_tamagotchi.get_em()[i]);
+        }
+        u8g.setPrintPos(0, 20);
+        u8g.print(game_tamagotchi.get_t_HP());
+        u8g.setPrintPos(0, 30);
+        u8g.print(game_time);
+    }while(u8g.nextPage());
 }
+
+
+
 
 void Serial_print(double _humid, double _tempr, int _noise, double _batt, double _ilum, bool _shock, bool _slide){
     Serial.print(_humid);
