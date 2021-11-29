@@ -1,24 +1,37 @@
 #include <U8glib.h>
 #include <ThreeWire.h>
 #include <RtcDS1302.h>
+#include <LCDWIKI_GUI.h> //Core graphics library
+#include <LCDWIKI_KBV.h> //Hardware-specific library
 #include "setting.h"
 #include "main.h"
 #include "DHT.h"
 
+
+
+//define some colour values
+#define BLACK   0x0000
+#define BLUE    0x001F
+#define RED     0xF800
+#define GREEN   0x07E0
+#define CYAN    0x07FF
+#define MAGENTA 0xF81F
+#define YELLOW  0xFFE0
+#define WHITE   0xFFFF
+
 U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NONE);
 //double _humid, double _tempr, int _noise, int ilum, bool _shock, bool _slide
-
-#define PIN_DHT 3
-#define PIN_VIB 2
-#define PIN_CDS A0
-#define PIN_MIC A1
-#define PIN_cRTC 5
-#define PIN_dRTC 4
-#define PIN_rRTC 7
-#define PIN_BUTN1 8
-#define PIN_BUTN2 9
-#define PIN_BUTN3 10
-#define PIN_BATT A2
+#define PIN_DHT 22
+#define PIN_VIB 23
+#define PIN_CDS A7
+#define PIN_MIC A6
+#define PIN_cRTC 50
+#define PIN_dRTC 51
+#define PIN_rRTC 52
+#define PIN_BUTN1 24
+#define PIN_BUTN2 25
+#define PIN_BUTN3 26
+#define PIN_BATT A10
 #define countof(a) (sizeof(a) / sizeof(a[0]))
 
 
@@ -38,6 +51,7 @@ int game_time;
 
 DHT dht(PIN_DHT, DHT22);
 ThreeWire myWire(PIN_dRTC, PIN_cRTC, PIN_rRTC);
+LCDWIKI_KBV mylcd(ILI9486,A3,A2,A1,A0,A4);
 RtcDS1302<ThreeWire> Rtc(myWire);
 Tamagotchi game_tamagotchi;
 RtcDateTime game_start_time;
@@ -45,6 +59,12 @@ RtcDateTime game_start_time;
 void setup()
 {
     Serial.begin(9600); //시리얼 정보
+    mylcd.Init_LCD();
+    mylcd.Fill_Screen(BLACK);
+    mylcd.Set_Text_Mode(0);
+    mylcd.Set_Text_colour(WHITE);
+    mylcd.Set_Text_Back_colour(BLACK);
+    mylcd.Set_Rotation(1);
     dht.begin(); //dht22시작
     pinMode(PIN_VIB, INPUT);
     pinMode(PIN_BUTN1, INPUT);
@@ -59,7 +79,6 @@ void setup()
 
     //printDateTime(compiled);
     //Serial.println();
-
     if (!Rtc.IsDateTimeValid()) 
     {
         // Common Causes:
@@ -100,8 +119,11 @@ void loop()
 
     if(game_tamagotchi.get_Game_stste() == false) {
         Serial.println("Press Game Start Button!!");
+        mylcd.Set_Text_Size(3);
+        mylcd.Print_String("Press Game Start Button!!", 0, 0);
         while(digitalRead(PIN_BUTN1) == LOW) {
         }
+        mylcd.Fill_Screen(BLACK);
         game_tamagotchi.start_game();
         game_tamagotchi.set_Game_state(true);
         game_start_time = Rtc.GetDateTime();
@@ -118,7 +140,17 @@ void loop()
     game_tamagotchi.set_val_sensor(_humid, _tempr, _noise, _batt, _ilum, game_time, _shock, _slide, _meal);
     //Serial_print(_humid, _tempr, _noise, _batt, _ilum, _shock, _slide);
     game_tamagotchi.play();
-    u8g.firstPage(); //OLED 페이지 시작
+
+    
+    if(game_time % 10 == 0) mylcd.Fill_Screen(BLACK);
+    mylcd.Set_Text_Size(3);
+    for(int i=0; i<9; i++){
+        mylcd.Print_Number_Int(game_tamagotchi.get_em()[i], i*30, 0, 0, ' ', 10);
+    }
+    mylcd.Print_Number_Int(game_tamagotchi.get_t_HP(), 0, 30, 0, ' ', 10);
+    mylcd.Print_Number_Int(game_time, 0, 60, 0, ' ', 10);
+    //delay(500);
+    /*u8g.firstPage(); //OLED 페이지 시작
     do{
         u8g.setFont(u8g_font_unifont);
         for(int i=0; i<9; i++){
@@ -130,6 +162,7 @@ void loop()
         u8g.setPrintPos(0, 30);
         u8g.print(game_time);
     }while(u8g.nextPage());
+    */
 }
 
 
@@ -176,4 +209,8 @@ int BattCheck() {
 	if (vl<BATT_MIN) bl=0;
 	if (vl>BATT_MAX) bl=100;
 	return bl;
+}
+
+void print_GUI() {
+
 }
