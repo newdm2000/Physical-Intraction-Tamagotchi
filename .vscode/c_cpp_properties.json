@@ -38,6 +38,8 @@
                 "C:\\Users\\newdm\\Documents\\Arduino\\libraries\\Rtc_by_Makuna\\src",
                 "C:\\Users\\newdm\\Documents\\Arduino\\libraries\\LCDWIKI_GUI",
                 "C:\\Users\\newdm\\Documents\\Arduino\\libraries\\LCDWIKI_KBV",
+                "C:\\Program Files (x86)\\Arduino\\libraries\\SD\\src",
+                "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\libraries\\SPI\\src",
                 "C:\\Users\\newdm\\Documents\\Arduino\\libraries\\DHT_sensor_library",
                 "C:\\Program Files (x86)\\Arduino\\libraries\\Adafruit_Sensor-master",
                 "c:\\program files (x86)\\arduino\\hardware\\tools\\avr\\lib\\gcc\\avr\\7.3.0\\include",

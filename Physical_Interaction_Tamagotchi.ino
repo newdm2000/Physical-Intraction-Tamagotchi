@@ -3,6 +3,8 @@
 #include <RtcDS1302.h>
 #include <LCDWIKI_GUI.h> //Core graphics library
 #include <LCDWIKI_KBV.h> //Hardware-specific library
+#include <SD.h>
+#include <SPI.h>
 #include "setting.h"
 #include "main.h"
 #include "DHT.h"
@@ -62,8 +64,7 @@ void setup()
     mylcd.Init_LCD();
     mylcd.Fill_Screen(BLACK);
     mylcd.Set_Text_Mode(0);
-    mylcd.Set_Text_colour(WHITE);
-    mylcd.Set_Text_Back_colour(BLACK);
+    
     mylcd.Set_Rotation(1);
     dht.begin(); //dht22시작
     pinMode(PIN_VIB, INPUT);
@@ -211,6 +212,14 @@ int BattCheck() {
 	return bl;
 }
 
-void print_GUI() {
-
+void print_back() {
+    mylcd.Fill_Screen(WHITE);
+    mylcd.Set_Text_colour(BLACK);
+    mylcd.Set_Text_Back_colour(WHITE);
+    mylcd.Set_Text_Mode(0);
+    mylcd.Set_Text_Size(3);
+    mylcd.Print_String("Game Time : ", 10, 10);
+    mylcd.Set_Draw_color(BLACK);
+    
+    
 }
