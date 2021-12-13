@@ -110,6 +110,7 @@ class Tamagotchi{
         void set_em();
         int *get_em() { return em; }
         int get_t_HP() { return t_HP; }
+        int get_game_step() { return Game_step; }
         
 
 

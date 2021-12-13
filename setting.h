@@ -16,15 +16,15 @@
 #define BATT_MIN 615
 
 //setting illuminance
-#define MAX_ILLUMINANCE 150
-#define MIN_ILLUMINANCE 20
+#define MAX_ILLUMINANCE 700
+#define MIN_ILLUMINANCE 250
 
 //setting time(second)
-#define TIME_MEAL 1800
-#define TIME_DAYTIME 7200
-#define TIME_NIGHT 3600
+#define TIME_MEAL 180
+#define TIME_DAYTIME 720
+#define TIME_NIGHT 360
 
 //setting game
 #define MAX_STEP 5
-#define LIMIT_TIME 60
+#define LIMIT_TIME 6
 #define MAX_HP 100

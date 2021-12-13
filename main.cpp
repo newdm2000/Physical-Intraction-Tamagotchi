@@ -146,7 +146,7 @@ void Tamagotchi::start_game(){
     Game_State = false;
     _state = NORMAL;
     t_HP = 100;
-    Game_step = 1;
+    Game_step = 5;
     cnt1 = false;
 }
 
